@@ -1,13 +1,17 @@
-import { SafeAreaView, Text, View, FlatList } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 import { styles } from '../../styles';
+import { Surface, Card } from 'react-native-paper';
 
 
 export default function MyGames() {
     return (
         <SafeAreaView>
-            <View style={styles.container}>
-                <Text style={styles.heading1}>My Games</Text>
-            </View>
+            <Card style={styles.card}>
+                <Card.Title titleStyle={styles.heading2} title="My Games"></Card.Title>
+                <Card.Content>
+                    <Text  style={styles.text}>View your games</Text>
+                </Card.Content>
+            </Card>
         </SafeAreaView>
-    )
+    );
 }

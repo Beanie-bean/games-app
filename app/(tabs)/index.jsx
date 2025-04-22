@@ -1,14 +1,17 @@
 import { SafeAreaView, Text, View } from 'react-native';
 import { styles } from '../../styles';
+import { Surface, Card } from 'react-native-paper';
 
 
 export default function Page() {
     return (
         <SafeAreaView>
-            <View style={styles.container}>
-                <Text style={styles.heading1}>GamesApp</Text>
-                <Text style={styles.body}>Make lists of games you have played</Text>
-            </View>
+            <Card style={styles.card}>
+                <Card.Title titleStyle={styles.heading2} title="Welcome!"></Card.Title>
+                <Card.Content>
+                    <Text style={styles.text}>Make lists of games you have played</Text>
+                </Card.Content>
+            </Card>
         </SafeAreaView>
     );
 }

@@ -2,8 +2,8 @@ const apiUrl = process.env.EXPO_PUBLIC_API_URL
 const apiKey = process.env.EXPO_PUBLIC_API_KEY;
 
 
-export function getAllGames() {
-    return fetch(`https://rawg.io/api/games?key=${apiKey}`)
+export function getAllGames(page) {
+    return fetch(`https://rawg.io/api/games?key=${apiKey}&page=${page}`)
         .then(response => {
             if (!response.ok)
                 throw new Error("Error in fetching all games: " + response.status.toString());
