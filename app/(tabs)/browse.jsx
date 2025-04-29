@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { SafeAreaView, Text, View, FlatList, Image } from 'react-native';
 import { getAllGames } from '../../fetches';
-import { Card, Surface, IconButton } from 'react-native-paper';
+import { Card, Surface, IconButton, Checkbox } from 'react-native-paper';
 import { styles } from '../../styles';
 
 export default function Browse() {
     const [games, setGames] = useState([])
-    const [game, setGame] = useState({})
     const [page, setPage] = useState(1)
-    const [searchWord, setSearchWord] = useState("")
     const [loading, setLoading] = useState(false);
+    const [myGames, setMyGames] = useState([])
+    const [checked, setChecked] = useState([]);
 
     const separator = () => <View style={styles.separator} />
 
@@ -17,10 +17,11 @@ export default function Browse() {
         handleFetch(page);
     }, [page]);
 
+
     const handleFetch = (page) => {
         setLoading(true)
         getAllGames(page)
-            .then(data => setGames(data.results))
+            .then(data => setGames(data.results.map(game => ({ ...game, checked: false }))))
             .catch(error => console.error(error))
             .finally(() => setLoading(false))
     }
@@ -38,6 +39,29 @@ export default function Browse() {
         }
     }
 
+    const handleCheck = (item) => {
+        const tempArray = [...games]
+        let index = tempArray.indexOf(item);
+        if (!myGames.map(game => game.name).includes(item.name)) {
+            myGames.push(item);
+            setMyGames([...new Set(myGames.map((game) => game))])
+        }
+        else if (myGames.map(game => game.name).includes(item.name)) {
+            setMyGames(myGames.map((game) => {
+                if (game.name === item.name) {
+                    return undefined;
+                }
+                else {
+                    return game
+                }
+            }).filter((game) => game !== undefined));
+        }
+        tempArray.splice(index, 1, { ...item, checked: !item.checked })
+        setGames(tempArray)
+    }
+    console.log(myGames.map(item => item.name))
+    console.log(games.map(item => item.checked))
+
     return (
         <SafeAreaView>
             <Surface style={styles.surface}>
@@ -48,8 +72,15 @@ export default function Browse() {
                             style={styles.list}
                             data={games}
                             ItemSeparatorComponent={separator}
-                            renderItem={({ item }) => <View style={{ gap: 10}}>
-                                <Text style={styles.listText}>{item.name}</Text>
+                            renderItem={({ item }) => <View style={{ gap: 10 }}>
+                                <View style={{ flexDirection: "row" }}>
+                                    <Checkbox.Item
+                                        mode="android"
+                                        status={item.checked ? "checked" : "unchecked"}
+                                        onPress={() => handleCheck(item)}>
+                                    </Checkbox.Item>
+                                    <Text style={styles.listText}>{item.name}</Text>
+                                </View>
                                 <Image
                                     style={styles.image}
                                     source={{
@@ -58,7 +89,7 @@ export default function Browse() {
                                 />
                             </View>}>
                         </FlatList>
-                       <View style={styles.buttons}>
+                        <View style={styles.buttons}>
                             <IconButton onPress={() => fetchPreviousPageData()} mode="contained" icon="arrow-left-bold" style={styles.button}></IconButton>
                             <IconButton onPress={() => fetchNextPageData()} mode="contained" icon="arrow-right-bold" style={styles.button}></IconButton>
                         </View>

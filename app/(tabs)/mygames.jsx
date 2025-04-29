@@ -1,9 +1,12 @@
 import { SafeAreaView, Text, View } from 'react-native';
 import { styles } from '../../styles';
 import { Surface, Card } from 'react-native-paper';
+import { useState } from 'react';
 
 
 export default function MyGames() {
+    const [myGames, setMyGames] = useState([]);
+    
     return (
         <SafeAreaView>
             <Card style={styles.card}>
