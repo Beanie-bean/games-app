@@ -21,16 +21,14 @@ export const styles = StyleSheet.create({
     },
 
     text: {
-        alignSelf: "center"
-    },
-
-    listText: {
-        alignSelf: "center"
+        fontSize: 18,
+        alignSelf: "center",
+        paddingBottom: 20
     },
 
     image: {
-        width: 60,
-        height: 60,
+        width: 70,
+        height: 70,
         alignSelf: "center"
     },
 
