@@ -1,10 +1,10 @@
-import { Button } from "react-native-paper"
+import { IconButton } from "react-native-paper"
 
 export default function AddButton() {
     
         return (
-            <Button icon="plus-thick" compact="true">
+            <IconButton icon="plus-thick" mode="contained" compact="true">
                 
-            </Button>
+            </IconButton>
         )
 }

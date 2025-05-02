@@ -1,11 +1,6 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-    surface: {
-        alignItems: "center",
-        justifyContent: "center",
-    },
-
     card: {
         margin: 10,
         padding: 10
@@ -27,13 +22,13 @@ export const styles = StyleSheet.create({
     },
 
     image: {
-        width: 70,
-        height: 70,
-        alignSelf: "center"
+        width: 150,
+        height: 100,
+        alignSelf: "center",
     },
 
     button: {
-        marginTop: 15,
+        marginTop: 10,
     },
 
     buttons: {
@@ -49,11 +44,16 @@ export const styles = StyleSheet.create({
     },
 
     appBar: {
-        marginTop:30
+        marginTop: 30
     },
 
     list: {
-        height: 490
-    }
+        height: 490,
+    },
 
+    listItem: {
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexDirection: "row"
+    },
 })

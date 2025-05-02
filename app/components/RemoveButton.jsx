@@ -1,10 +1,10 @@
-import { Button } from "react-native-paper"
+import { IconButton } from "react-native-paper"
 
 export default function RemoveButton() {
     
         return (
-            <Button  icon="delete" compact="true">
+            <IconButton icon="delete" mode="contained" compact="true">
                 
-            </Button>
+            </IconButton>
         )
 }

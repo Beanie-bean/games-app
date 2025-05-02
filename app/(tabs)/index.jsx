@@ -1,6 +1,6 @@
 import { SafeAreaView, Text, View } from 'react-native';
 import { styles } from '../../styles';
-import { Surface, Card } from 'react-native-paper';
+import { Card } from 'react-native-paper';
 
 
 export default function Page() {

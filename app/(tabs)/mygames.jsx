@@ -1,12 +1,21 @@
-import { FlatList, Image, SafeAreaView, Text, View } from 'react-native';
+import { Alert, FlatList, Image, Pressable, SafeAreaView, Text, View } from 'react-native';
 import { styles } from '../../styles';
-import { Surface, Card } from 'react-native-paper';
+import { Card, IconButton, Snackbar, Button, Modal, TextInput } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { db } from '../../firebaseConfig';
-import { onValue, push, ref } from "firebase/database";
+import { onValue, push, ref, remove } from "firebase/database";
+import RemoveButton from '../components/RemoveButton';
+import { Portal } from 'react-native-paper';
 
 export default function MyGames() {
     const [myGames, setMyGames] = useState([]);
+    const [lists, setLists] = useState([]);
+    const [newList, setNewList] = useState({
+        listName: "",
+        listGames: []
+    })
+    const [visible, setVisible] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const separator = () => <View style={styles.separator} />
 
@@ -17,36 +26,117 @@ export default function MyGames() {
     const getMyGames = () => {
         onValue(ref(db, "games/"), (snapshot) => {
             const data = snapshot.val();
-            setMyGames(Object.values(data))
+            if (data === null) {
+                return
+            }
+            else {
+                setMyGames(Object.entries(data))
+            }
         })
     };
 
+    const handleDelete = (item) => {
+        const id = item[0];
+        remove(ref(db, "games/" + id))
+        onToggleSnackBar()
+        if (myGames.length == 1) {
+            setMyGames([])
+        }
+    }
+
+
+    const handleModalOpen = () => {
+        setOpen(true)
+    }
+
+    const handleModalClose = () => {
+        setOpen(false)
+    }
+
+    const createNewList = (item) => {
+        push(ref(db, "lists/"), item)
+    }
+    const onToggleSnackBar = () => setVisible(!visible);
+
+    const onDismissSnackBar = () => setVisible(false);
+
+    const showDialog = (item) => {
+        Alert.alert(
+            "Delete",
+            "Are you sure you want to delete this game?",
+            [
+                {
+                    text: "Cancel"
+                },
+                {
+                    text: "Delete",
+                    onPress: () => handleDelete(item)
+                }
+            ]
+        )
+    }
+
+
     return (
         <SafeAreaView>
-            <Surface style={styles.surface}>
             <Card style={styles.card}>
                 <Card.Title titleStyle={styles.heading2} title="My Games"></Card.Title>
                 <Card.Content>
-                    <Text style={styles.text}>View your games</Text>
+                    <View style={styles.listItem}>
+                        <Button onPress={() => handleModalOpen()} compact="true" style={{ flex: 1, alignItems: "flex-start" }} icon={"plus"}>New List</Button>
+                    </View>
                     <FlatList
                         style={styles.list}
                         data={myGames}
                         ItemSeparatorComponent={separator}
                         renderItem={({ item }) => <View style={{ gap: 10 }}>
-                            <View style={{ flexDirection: "row" }}>
-                                <Text style={styles.listText}>{item.name}</Text>
+                            <View style={styles.listItem}>
+                                <Text style={{ paddingLeft: 8, maxWidth: 200 }}>{item[1].name}</Text>
+                                <View>
+                                    {myGames.map(game => game.id).includes(item.id) &&
+                                        <Pressable onPress={() => showDialog(item)}><RemoveButton /></Pressable>
+                                    }
+                                </View>
+
                             </View>
                             <Image
                                 style={styles.image}
                                 source={{
-                                    uri: `${item.background_image}`
+                                    uri: `${item[1].background_image}`
                                 }}
                             />
                         </View>}>
                     </FlatList>
+                    <View>
+                        {myGames.length > 20 &&
+                            <View style={styles.buttons}>
+                                <IconButton mode="contained" icon="arrow-left-bold" style={styles.button}></IconButton>
+                                <IconButton mode="contained" icon="arrow-right-bold" style={styles.button}></IconButton>
+                            </View>
+                        }
+                    </View>
                 </Card.Content>
             </Card>
-            </Surface>
+            <Snackbar
+                visible={visible}
+                onDismiss={onDismissSnackBar}
+                duration={3000}>
+                Game Deleted
+            </Snackbar>
+            <Portal>
+                <Modal visible={open} onDismiss={handleModalClose}>
+                    <Card style={styles.card}>
+                        <Card.Title titleStyle={styles.heading2} title="Create a New List"></Card.Title>
+                        <Card.Content>
+                            <TextInput
+                                label="List Name"
+                                value={newList.listName}
+                                onChangeText={text => setNewList({ ...newList, listName: text })}
+                            />
+                        </Card.Content>
+                    </Card>
+                </Modal>
+            </Portal>
         </SafeAreaView>
     );
 }
