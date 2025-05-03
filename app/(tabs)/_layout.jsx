@@ -35,11 +35,11 @@ export default function TabLayout() {
                     ),
                 }} />
                 <Tabs.Screen
-                    name="profile"
+                    name="mylists"
                     options={{
-                        title: "Profile",
+                        title: "My Lists",
                         tabBarIcon: ({ color, focused }) => (
-                            <Ionicons name={focused ? "body" : "body-outline"} color={color} size={24} />
+                            <Ionicons name={focused ? "list" : "list-outline"} color={color} size={24} />
                         ),
                     }} />
         </Tabs>

@@ -56,4 +56,39 @@ export const styles = StyleSheet.create({
         justifyContent: "space-between",
         flexDirection: "row"
     },
+
+    dropdown: {
+        height: 50,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+      },
+
+    modalButton: {
+        marginTop: 10,
+        marginBottom: 10
+    },
+
+    indexListItem: {
+        flex: 1,
+        flexDirection: "row",
+        width: 80,
+        height: 80,
+    },
+
+    selectedStyle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 14,
+        backgroundColor: 'white',
+        marginTop: 6,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+      },
+
+      textSelectedStyle: {
+        marginRight: 5,
+        fontSize: 15,
+      },
 })

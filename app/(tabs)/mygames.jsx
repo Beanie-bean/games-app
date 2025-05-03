@@ -1,21 +1,14 @@
 import { Alert, FlatList, Image, Pressable, SafeAreaView, Text, View } from 'react-native';
 import { styles } from '../../styles';
-import { Card, IconButton, Snackbar, Button, Modal, TextInput } from 'react-native-paper';
+import { Card, IconButton, Snackbar } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { db } from '../../firebaseConfig';
-import { onValue, push, ref, remove } from "firebase/database";
+import { onValue, ref, remove } from "firebase/database";
 import RemoveButton from '../components/RemoveButton';
-import { Portal } from 'react-native-paper';
 
 export default function MyGames() {
     const [myGames, setMyGames] = useState([]);
-    const [lists, setLists] = useState([]);
-    const [newList, setNewList] = useState({
-        listName: "",
-        listGames: []
-    })
     const [visible, setVisible] = useState(false);
-    const [open, setOpen] = useState(false);
 
     const separator = () => <View style={styles.separator} />
 
@@ -43,19 +36,7 @@ export default function MyGames() {
             setMyGames([])
         }
     }
-
-
-    const handleModalOpen = () => {
-        setOpen(true)
-    }
-
-    const handleModalClose = () => {
-        setOpen(false)
-    }
-
-    const createNewList = (item) => {
-        push(ref(db, "lists/"), item)
-    }
+    
     const onToggleSnackBar = () => setVisible(!visible);
 
     const onDismissSnackBar = () => setVisible(false);
@@ -76,15 +57,11 @@ export default function MyGames() {
         )
     }
 
-
     return (
         <SafeAreaView>
             <Card style={styles.card}>
                 <Card.Title titleStyle={styles.heading2} title="My Games"></Card.Title>
                 <Card.Content>
-                    <View style={styles.listItem}>
-                        <Button onPress={() => handleModalOpen()} compact="true" style={{ flex: 1, alignItems: "flex-start" }} icon={"plus"}>New List</Button>
-                    </View>
                     <FlatList
                         style={styles.list}
                         data={myGames}
@@ -123,20 +100,6 @@ export default function MyGames() {
                 duration={3000}>
                 Game Deleted
             </Snackbar>
-            <Portal>
-                <Modal visible={open} onDismiss={handleModalClose}>
-                    <Card style={styles.card}>
-                        <Card.Title titleStyle={styles.heading2} title="Create a New List"></Card.Title>
-                        <Card.Content>
-                            <TextInput
-                                label="List Name"
-                                value={newList.listName}
-                                onChangeText={text => setNewList({ ...newList, listName: text })}
-                            />
-                        </Card.Content>
-                    </Card>
-                </Modal>
-            </Portal>
         </SafeAreaView>
     );
 }
