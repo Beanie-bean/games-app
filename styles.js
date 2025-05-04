@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
     },
 
     list: {
-        height: 490,
+        height: 500,
     },
 
     listItem: {
@@ -63,7 +63,7 @@ export const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderRadius: 8,
         paddingHorizontal: 8,
-      },
+    },
 
     modalButton: {
         marginTop: 10,
@@ -85,10 +85,26 @@ export const styles = StyleSheet.create({
         marginTop: 6,
         paddingHorizontal: 8,
         paddingVertical: 4,
-      },
+    },
 
-      textSelectedStyle: {
+    textSelectedStyle: {
         marginRight: 5,
         fontSize: 15,
-      },
+    },
+
+    section_style: {
+        padding: 10,
+        marginTop: 10,
+        marginBottom: 10,
+        fontSize: 18,
+    },
+
+    item_style: {
+        padding: 10,
+        backgroundColor: '#e1e1e1',
+        borderRadius: 14,
+        maxWidth: 240,
+        marginVertical: 4,
+        marginHorizontal: 18,
+    }
 })

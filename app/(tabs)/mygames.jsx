@@ -74,7 +74,6 @@ export default function MyGames() {
                                         <Pressable onPress={() => showDialog(item)}><RemoveButton /></Pressable>
                                     }
                                 </View>
-
                             </View>
                             <Image
                                 style={styles.image}
@@ -84,14 +83,6 @@ export default function MyGames() {
                             />
                         </View>}>
                     </FlatList>
-                    <View>
-                        {myGames.length > 20 &&
-                            <View style={styles.buttons}>
-                                <IconButton mode="contained" icon="arrow-left-bold" style={styles.button}></IconButton>
-                                <IconButton mode="contained" icon="arrow-right-bold" style={styles.button}></IconButton>
-                            </View>
-                        }
-                    </View>
                 </Card.Content>
             </Card>
             <Snackbar

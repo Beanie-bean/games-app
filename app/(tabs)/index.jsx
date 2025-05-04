@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, View, Pressable } from 'react-native';
+import { SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
 import { styles } from '../../styles';
 import { Card } from 'react-native-paper';
 import { useRouter } from 'expo-router';
@@ -45,28 +45,28 @@ export default function Page() {
                 </Card.Content>
             </Card>
             <Card style={styles.card}>
-                <Pressable onPress={() => router.navigate("/browse")}>
+                <TouchableOpacity onPress={() => router.navigate("/browse")}>
                     <Card.Title titleStyle={styles.heading2} title="Browse Games"></Card.Title>
                     <Card.Content>
                         <Text style={styles.text}></Text>
                     </Card.Content>
-                </Pressable>
+                </TouchableOpacity>
             </Card>
             <Card style={styles.card}>
-                <Pressable onPress={() => router.navigate("/mygames")}>
+                <TouchableOpacity onPress={() => router.navigate("/mygames")}>
                     <Card.Title titleStyle={styles.heading2} title="My Games"></Card.Title>
                     <Card.Content>
                         <Text style={styles.text}></Text>
                     </Card.Content>
-                </Pressable>
+                </TouchableOpacity>
             </Card>
             <Card style={styles.card}>
-                <Pressable onPress={() => router.navigate("/mylists")}>
+                <TouchableOpacity onPress={() => router.navigate("/mylists")}>
                     <Card.Title titleStyle={styles.heading2} title="My Lists"></Card.Title>
                     <Card.Content>
                         <Text style={styles.text}></Text>
                     </Card.Content>
-                </Pressable>
+                </TouchableOpacity>
             </Card>
         </SafeAreaView>
     );
