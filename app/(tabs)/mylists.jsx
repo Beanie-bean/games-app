@@ -1,6 +1,6 @@
 import { SafeAreaView, Text, View, TouchableOpacity, Pressable, Alert, SectionList } from 'react-native';
 import { styles } from '../../styles';
-import { Card, Button, Portal, Modal, TextInput, Snackbar } from 'react-native-paper';
+import { Card, Button, Portal, Modal, TextInput, Snackbar, IconButton } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { MultiSelect } from 'react-native-element-dropdown';
 import { onValue, ref, push, remove } from "firebase/database";
@@ -17,6 +17,8 @@ export default function MyLists() {
     })
     const [open, setOpen] = useState(false);
     const [visible, setVisible] = useState(false);
+
+    const separator = () => <View style={styles.separator} />
 
     useEffect(() => {
         getMyGames()
@@ -83,6 +85,12 @@ export default function MyLists() {
             setLists([])
         }
     }
+
+    const handleDeleteGame = (listId, game) => {
+        const gameId = myGames.find(item => item[1].name === game)[0]
+        remove(ref(db, "lists/" + listId + "listGames"))
+    }
+
     const sectionListData = lists.map(item => ({
         title: item[1].listName,
         data: item[1].listGames.map(g => g[1].name),
@@ -119,18 +127,20 @@ export default function MyLists() {
                     </View>
                     <SectionList
                         stickySectionHeadersEnabled={false}
-                        style={styles.list}
+                        style={{height: 500}}
                         sections={sectionListData}
                         renderSectionHeader={({ section }) => (
-                            <View style={styles.listItem}>
+                            <View style={{flexDirection: "row", alignItems: "center"}}>
                                 <Text style={styles.section_style}>{section.title}</Text>
-                                <Pressable onPress={() => showDialog(section.id)}><RemoveButton /></Pressable>
+                                <Button compact onPress={() => showDialog(section.id)}>Delete List</Button>
                             </View>
                         )}
                         renderItem={({ item }) => (
-                            <Text style={styles.item_style}>{item}</Text>
-                        )}
-                    >
+                            <View style={styles.listItem}>
+                                <Text style={styles.item_style}>{item}</Text>
+                                <IconButton onPress={() => handleDeleteGame(item.id, item)}iconColor="#bababa" icon="delete" />
+                                </View>
+                        )}>
                     </SectionList>
                 </Card.Content>
             </Card>

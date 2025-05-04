@@ -46,7 +46,8 @@ export const styles = StyleSheet.create({
     separator: {
         marginVertical: 15,
         borderColor: "gray",
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        borderColor: '#88c1b1'
     },
 
     appBar: {
@@ -54,7 +55,7 @@ export const styles = StyleSheet.create({
     },
 
     list: {
-        height: 500,
+        height: 410,
     },
 
     listItem: {

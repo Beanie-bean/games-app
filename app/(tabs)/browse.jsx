@@ -18,8 +18,13 @@ export default function Browse() {
     const separator = () => <View style={styles.separator} />
 
     useEffect(() => {
+        if (searchWord == ""){
+            handleFetch();
+        }
+        else {
+            handleSearch()
+        }
         getMyGames()
-        handleFetch(page);
     }, [searchWord, page]);
 
     const getMyGames = () => {
@@ -35,7 +40,7 @@ export default function Browse() {
     };
 
     const handleSearch = () => {
-        getGamesByText(searchWord)
+        getGamesByText(searchWord, page)
             .then(data => setGames(data.results))
             .catch(error => console.error(error))
     }
@@ -53,7 +58,7 @@ export default function Browse() {
         }
     }
 
-    const handleFetch = (page) => {
+    const handleFetch = () => {
         getAllGames(page)
             .then(data => setGames(data.results))
             .catch(error => console.error(error))
@@ -105,8 +110,7 @@ export default function Browse() {
                                 value={searchWord}
                                 onChangeText={text => setSearchWord(text)}
                             />
-                            <IconButton icon={"magnify"} textColor="#000000" onPress={() => handleSearch()} ></IconButton>
-                            <Button compact textColor="#000000" onPress={() => setSearchWord("")}>X</Button>
+                            <Button compact textColor="#000000" onPress={() => setSearchWord("")}>Clear</Button>
                         </View>
                         <FlatList
                             style={styles.list}

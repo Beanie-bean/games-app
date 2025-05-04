@@ -12,8 +12,8 @@ export function getAllGames(page) {
         })
 }
 
-export function getGamesByText(text) {
-    return fetch(`https://rawg.io/api/games?search=${text}?&key=${apiKey}`)
+export function getGamesByText(text, page) {
+    return fetch(`https://rawg.io/api/games?key=${apiKey}&page=${page}&search=${text}`)
         .then(response => {
             if (!response.ok)
                 throw new Error("Error in fetching games by text: " + response.status.toString());
