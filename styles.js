@@ -63,6 +63,13 @@ export const styles = StyleSheet.create({
         flexDirection: "row"
     },
 
+    topButtons: {
+        paddingBottom: 10,
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexDirection: "row"
+    },
+
     dropdown: {
         height: 50,
         borderColor: 'gray',
@@ -113,5 +120,9 @@ export const styles = StyleSheet.create({
         width: 240,
         marginVertical: 4,
         marginHorizontal: 18,
+    },
+
+    clearButton: {
+        fontSize: 14
     }
 })

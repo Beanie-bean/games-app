@@ -18,8 +18,6 @@ export default function MyLists() {
     const [open, setOpen] = useState(false);
     const [visible, setVisible] = useState(false);
 
-    const separator = () => <View style={styles.separator} />
-
     useEffect(() => {
         getMyGames()
         getMyLists()
