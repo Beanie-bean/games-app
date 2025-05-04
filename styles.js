@@ -3,7 +3,13 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     card: {
         margin: 10,
-        padding: 10
+        padding: 10,
+    },
+
+    indexCard: {
+        margin: 20,
+        padding: 10,
+        backgroundColor: "#afd7cb"
     },
 
     heading1: {
@@ -83,6 +89,7 @@ export const styles = StyleSheet.create({
         borderRadius: 14,
         backgroundColor: 'white',
         marginTop: 6,
+        maxWidth:240,
         paddingHorizontal: 8,
         paddingVertical: 4,
     },
@@ -103,7 +110,7 @@ export const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#e1e1e1',
         borderRadius: 14,
-        maxWidth: 240,
+        width: 240,
         marginVertical: 4,
         marginHorizontal: 18,
     }

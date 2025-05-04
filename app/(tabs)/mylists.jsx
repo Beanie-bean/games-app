@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, Text, View, TouchableOpacity, FlatList, Pressable, Alert, SectionList } from 'react-native';
+import { SafeAreaView, Text, View, TouchableOpacity, Pressable, Alert, SectionList } from 'react-native';
 import { styles } from '../../styles';
 import { Card, Button, Portal, Modal, TextInput, Snackbar } from 'react-native-paper';
 import { useEffect, useState } from 'react';
@@ -113,29 +113,29 @@ export default function MyLists() {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-                <Card style={styles.card}>
-                    <Card.Title titleStyle={styles.heading2} title="My Lists"></Card.Title>
-                    <Card.Content>
-                        <View style={styles.listItem}>
-                            <Button onPress={() => handleModalOpen()} compact="true" style={{ flex: 1, alignItems: "flex-start" }} icon={"plus"}>New List</Button>
-                        </View>
-                        <SectionList
-                            stickySectionHeadersEnabled={false}
-                            style={styles.list}
-                            sections={sectionListData}
-                            renderSectionHeader={({ section }) => (
-                                <View style={styles.listItem}>
-                                    <Text style={styles.section_style}>{section.title}</Text>
-                                    <Pressable onPress={() => showDialog(section.id)}><RemoveButton /></Pressable>
-                                </View>
-                            )}
-                            renderItem={({ item }) => (
-                                <Text style={styles.item_style}>{item}</Text>
-                            )}
-                        >
-                        </SectionList>
-                    </Card.Content>
-                </Card>
+            <Card style={styles.card}>
+                <Card.Title titleStyle={styles.heading2} title="My Lists"></Card.Title>
+                <Card.Content>
+                    <View style={styles.listItem}>
+                        <Button onPress={() => handleModalOpen()} compact="true" style={{ flex: 1, alignItems: "flex-start" }} icon={"plus"}>New List</Button>
+                    </View>
+                    <SectionList
+                        stickySectionHeadersEnabled={false}
+                        style={styles.list}
+                        sections={sectionListData}
+                        renderSectionHeader={({ section }) => (
+                            <View style={styles.listItem}>
+                                <Text style={styles.section_style}>{section.title}</Text>
+                                <Pressable onPress={() => showDialog(section.id)}><RemoveButton /></Pressable>
+                            </View>
+                        )}
+                        renderItem={({ item }) => (
+                            <Text style={styles.item_style}>{item}</Text>
+                        )}
+                    >
+                    </SectionList>
+                </Card.Content>
+            </Card>
             <Portal>
                 <Modal style={{ justifyContent: "flex-start" }} visible={open} onDismiss={handleModalClose}>
                     <Card style={styles.card}>
@@ -143,6 +143,8 @@ export default function MyLists() {
                         <Card.Content>
                             <TextInput
                                 label="List Name"
+                                mode='outlined'
+                                style={{ backgroundColor: "#cae8e0" }}
                                 value={newList.listName}
                                 onChangeText={text => setNewList({ ...newList, listName: text })}
                             />

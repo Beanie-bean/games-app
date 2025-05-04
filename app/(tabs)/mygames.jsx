@@ -1,6 +1,6 @@
 import { Alert, FlatList, Image, Pressable, SafeAreaView, Text, View } from 'react-native';
 import { styles } from '../../styles';
-import { Card, IconButton, Snackbar } from 'react-native-paper';
+import { Card, Snackbar } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { db } from '../../firebaseConfig';
 import { onValue, ref, remove } from "firebase/database";
@@ -36,7 +36,7 @@ export default function MyGames() {
             setMyGames([])
         }
     }
-    
+
     const onToggleSnackBar = () => setVisible(!visible);
 
     const onDismissSnackBar = () => setVisible(false);

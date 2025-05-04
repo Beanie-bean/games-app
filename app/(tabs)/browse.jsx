@@ -110,8 +110,8 @@ export default function Browse() {
                         </View>}>
                     </FlatList>
                     <View style={styles.buttons}>
-                        <IconButton onPress={() => fetchPreviousPageData()} mode="contained" icon="arrow-left-bold" style={styles.button}></IconButton>
-                        <IconButton onPress={() => fetchNextPageData()} mode="contained" icon="arrow-right-bold" style={styles.button}></IconButton>
+                        <IconButton containerColor="#e1e1e1" onPress={() => fetchPreviousPageData()} mode="contained" icon="arrow-left-bold" style={styles.button} ></IconButton>
+                        <IconButton containerColor="#e1e1e1" onPress={() => fetchNextPageData()} mode="contained" icon="arrow-right-bold" style={styles.button}></IconButton>
                     </View>
                 </Card.Content>
             </Card>
