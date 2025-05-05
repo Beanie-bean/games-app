@@ -1,11 +1,10 @@
-import { SafeAreaView, Text, View, TouchableOpacity, Pressable, Alert, SectionList } from 'react-native';
+import { SafeAreaView, Text, View, TouchableOpacity, Alert, SectionList, ScrollView, Dimensions } from 'react-native';
 import { styles } from '../../styles';
-import { Card, Button, Portal, Modal, TextInput, Snackbar, IconButton } from 'react-native-paper';
+import { Card, Button, Portal, Modal, TextInput, Snackbar } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { MultiSelect } from 'react-native-element-dropdown';
-import { onValue, ref, push, remove } from "firebase/database";
+import { onValue, ref, push, remove, update } from "firebase/database";
 import { db } from '../../firebaseConfig';
-import RemoveButton from '../components/RemoveButton';
 
 export default function MyLists() {
     const [lists, setLists] = useState([]);
@@ -15,10 +14,14 @@ export default function MyLists() {
         listName: "",
         listGames: []
     })
-    const [open, setOpen] = useState(false);
+    const [createListOpen, setCreateListOpen] = useState(false);
+    const [editListopen, setEditListOpen] = useState(false);
     const [visible, setVisible] = useState(false);
-
-    const separator = () => <View style={styles.separator} />
+    const [editedList, setEditedList] = useState({
+        data: [],
+        id: "",
+        title: ""
+    })
 
     useEffect(() => {
         getMyGames()
@@ -49,30 +52,50 @@ export default function MyLists() {
         })
     };
 
-    const handleModalOpen = () => {
-        setOpen(true)
+    const handleCreateModalOpen = () => {
+        setCreateListOpen(true)
     }
 
-    const handleModalClose = () => {
+    const handleCreateModalClose = () => {
         setSelectedGames([])
         setNewList({
             listName: "",
             listGames: []
         })
-        setOpen(false)
+        setCreateListOpen(false)
+    }
+
+    const handleEditModalOpen = (item) => {
+        setEditedList({
+            data: item.data,
+            id: item.id,
+            title: item.title
+        })
+        setSelectedGames(editedList.data)
+        setEditListOpen(true)
+    }
+
+    const handleEditModalClose = () => {
+        setEditedList({
+            data: [],
+            id: "",
+            title: ""
+        })
+        setEditListOpen(false)
     }
 
     const createNewList = (list) => {
         setNewList(list)
         setLists({ ...lists, list })
         push(ref(db, "lists/"), list)
-        handleModalClose()
+        handleCreateModalClose()
     }
 
     const addtoList = () => {
         const list = { ...newList, listGames: selectedGames };
         createNewList(list)
     }
+
     const dropDownItems = myGames.map(game => ({
         label: game[1].name,
         value: game
@@ -86,9 +109,8 @@ export default function MyLists() {
         }
     }
 
-    const handleDeleteGame = (listId, game) => {
-        const gameId = myGames.find(item => item[1].name === game)[0]
-        remove(ref(db, "lists/" + listId + "listGames"))
+    const handleUpdateList = () => {
+        update(ref(db, 'lists/' + "listGames"))
     }
 
     const sectionListData = lists.map(item => ({
@@ -123,67 +145,117 @@ export default function MyLists() {
                 <Card.Title titleStyle={styles.heading2} title="My Lists"></Card.Title>
                 <Card.Content>
                     <View style={styles.listItem}>
-                        <Button onPress={() => handleModalOpen()} compact="true" style={{ flex: 1, alignItems: "flex-start" }} icon={"plus"}>New List</Button>
+                        <Button onPress={() => handleCreateModalOpen()} compact="true" style={{ flex: 1, alignItems: "flex-start" }} icon={"plus"}>New List</Button>
                     </View>
                     <SectionList
                         stickySectionHeadersEnabled={false}
-                        style={{height: 500}}
+                        style={{ height: 500 }}
                         sections={sectionListData}
                         renderSectionHeader={({ section }) => (
-                            <View style={{flexDirection: "row", alignItems: "center"}}>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <Text style={styles.section_style}>{section.title}</Text>
-                                <Button compact onPress={() => showDialog(section.id)}>Delete List</Button>
+                                {/* <Button compact onPress={() => handleEditModalOpen(section)}>Edit</Button> */}
+                                <Button compact onPress={() => showDialog(section.id)}>Delete</Button>
                             </View>
                         )}
                         renderItem={({ item }) => (
                             <View style={styles.listItem}>
                                 <Text style={styles.item_style}>{item}</Text>
-                                <IconButton onPress={() => handleDeleteGame(item.id, item)}iconColor="#bababa" icon="delete" />
-                                </View>
+                            </View>
                         )}>
                     </SectionList>
                 </Card.Content>
             </Card>
             <Portal>
-                <Modal style={{ justifyContent: "flex-start" }} visible={open} onDismiss={handleModalClose}>
-                    <Card style={styles.card}>
-                        <Card.Title titleStyle={styles.heading2} title="Create a New List"></Card.Title>
-                        <Card.Content>
-                            <TextInput
-                                label="List Name"
-                                mode='outlined'
-                                style={{ backgroundColor: "#cae8e0" }}
-                                value={newList.listName}
-                                onChangeText={text => setNewList({ ...newList, listName: text })}
-                            />
-                            <View style={{ paddingTop: 10 }}>
-                                <MultiSelect
-                                    style={styles.dropdown}
-                                    data={dropDownItems}
-                                    search
-                                    labelField="label"
-                                    valueField="value"
-                                    value={selectedGames}
-                                    placeholder="Select Game"
-                                    searchPlaceholder="Search..."
-                                    onChange={(item) => setSelectedGames(item)}
-
-                                    renderSelectedItem={(item, unSelect) => (
-                                        <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
-                                            <View style={styles.selectedStyle}>
-                                                <Text style={styles.textSelectedStyle}>{item.label}</Text>
-                                                <Button icon="delete" />
-                                            </View>
-                                        </TouchableOpacity>
-                                    )}
+                <Modal visible={editListopen} onDismiss={handleEditModalClose}>
+                    <View style={{ maxHeight: Dimensions.get('window').height - 50 }}>
+                        <Card style={styles.card}>
+                            <Card.Title titleStyle={styles.heading2} title="Edit List"></Card.Title>
+                            <Card.Content>
+                                <TextInput
+                                    label="List Name"
+                                    mode='outlined'
+                                    style={{ backgroundColor: "#cae8e0" }}
+                                    value={editedList.title}
+                                    onChangeText={text => setEditedList({ ...editedList, title: text })}
                                 />
-                                <View style={{ alignItems: "center", justifyContent: "flex-start", flexDirection: "row" }}>
-                                    <Button onPress={() => handleModalClose()} style={styles.modalButton}>Cancel</Button>
+                                <View style={{ paddingTop: 10 }}>
+                                    <ScrollView style={{ height: 350 }}>
+
+                                        <MultiSelect
+                                            style={styles.dropdown}
+                                            data={dropDownItems}
+                                            search
+                                            labelField="label"
+                                            valueField="value"
+                                            value={selectedGames}
+                                            placeholder="Select Game"
+                                            searchPlaceholder="Search..."
+                                            onChange={(item) => setSelectedGames(item)}
+
+                                            renderSelectedItem={(item, unSelect) => (
+                                                <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
+                                                    <View style={styles.selectedStyle}>
+                                                        <Text style={styles.textSelectedStyle}>{item.label}</Text>
+                                                        <Button icon="delete" />
+                                                    </View>
+                                                </TouchableOpacity>
+                                            )}
+                                        />
+                                    </ScrollView>
+
+                                    <View style={{ alignItems: "center", justifyContent: "flex-start", flexDirection: "row" }}>
+                                        <Button onPress={() => handleEditModalClose()} style={styles.modalButton}>Cancel</Button>
+                                    </View>
+                                    <Button onPress={() => addtoList()} mode="contained">Create List</Button>
                                 </View>
-                                <Button onPress={() => addtoList()} mode="contained">Create List</Button>
-                            </View>
-                        </Card.Content>
-                    </Card>
+                            </Card.Content>
+                        </Card>
+                    </View>
+                </Modal>
+                <Modal visible={createListOpen} onDismiss={handleCreateModalClose}>
+                    <View style={{ maxHeight: Dimensions.get('window').height - 50 }}>
+                        <Card style={styles.card}>
+                            <Card.Title titleStyle={styles.heading2} title="Create a New List"></Card.Title>
+                            <Card.Content>
+                                <TextInput
+                                    label="List Name"
+                                    mode='outlined'
+                                    style={{ backgroundColor: "#cae8e0" }}
+                                    value={newList.listName}
+                                    onChangeText={text => setNewList({ ...newList, listName: text })}
+                                />
+                                <View style={{ paddingTop: 10 }}>
+                                    <ScrollView style={{ height: 350 }}>
+                                        <MultiSelect
+                                            style={styles.dropdown}
+                                            data={dropDownItems}
+                                            search
+                                            labelField="label"
+                                            valueField="value"
+                                            value={selectedGames}
+                                            placeholder="Select Game"
+                                            searchPlaceholder="Search..."
+                                            onChange={(item) => setSelectedGames(item)}
+                                            renderSelectedItem={(item, unSelect) => (
+                                                <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
+                                                    <View style={styles.selectedStyle}>
+                                                        <Text style={styles.textSelectedStyle}>{item.label}</Text>
+                                                        <Button icon="delete" />
+                                                    </View>
+                                                </TouchableOpacity>
+                                            )}
+                                        />
+                                    </ScrollView>
+
+                                    <View style={{ alignItems: "center", justifyContent: "flex-start", flexDirection: "row" }}>
+                                        <Button onPress={() => handleCreateModalClose()} style={styles.modalButton}>Cancel</Button>
+                                    </View>
+                                    <Button onPress={() => addtoList()} mode="contained">Create List</Button>
+                                </View>
+                            </Card.Content>
+                        </Card>
+                    </View>
                 </Modal>
             </Portal>
             <Snackbar

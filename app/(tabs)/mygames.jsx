@@ -63,7 +63,7 @@ export default function MyGames() {
                 <Card.Title titleStyle={styles.heading2} title="My Games"></Card.Title>
                 <Card.Content>
                     <FlatList
-                        style={{height: 500}}
+                        style={{ height: 500 }}
                         data={myGames}
                         ItemSeparatorComponent={separator}
                         renderItem={({ item }) => <View style={{ gap: 10 }}>

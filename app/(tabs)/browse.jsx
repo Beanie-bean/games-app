@@ -18,7 +18,7 @@ export default function Browse() {
     const separator = () => <View style={styles.separator} />
 
     useEffect(() => {
-        if (searchWord == ""){
+        if (searchWord == "") {
             handleFetch();
         }
         else {
@@ -96,56 +96,56 @@ export default function Browse() {
             ]
         )
     }
-    console.log(searchWord)
+
     return (
-            <SafeAreaView>
-                <Card style={styles.card}>
-                    <Card.Title titleStyle={styles.heading2} title="Games"></Card.Title>
-                    <Card.Content>
-                        <View style={styles.topButtons}>
-                            <TextInput
-                                label="Search by Name"
-                                mode='outlined'
-                                style={{ backgroundColor: "#cae8e0", width: 240 }}
-                                value={searchWord}
-                                onChangeText={text => setSearchWord(text)}
-                            />
-                            <Button compact textColor="#000000" onPress={() => setSearchWord("")}>Clear</Button>
-                        </View>
-                        <FlatList
-                            style={styles.list}
-                            data={games}
-                            ItemSeparatorComponent={separator}
-                            renderItem={({ item }) => <View style={{ gap: 10 }}>
-                                <View style={styles.listItem}>
-                                    <Text style={{ paddingLeft: 8, maxWidth: 200 }}>{item.name}</Text>
-                                    <View>
-                                        {myGames.find(game => game[1].id === item.id)
-                                            ? <Pressable onPress={() => showDialog(item)}><RemoveButton /></Pressable>
-                                            : <Pressable onPress={() => handleSave(item)}><AddButton /></Pressable>
-                                        }
-                                    </View>
+        <SafeAreaView>
+            <Card style={styles.card}>
+                <Card.Title titleStyle={styles.heading2} title="Games"></Card.Title>
+                <Card.Content>
+                    <View style={styles.topButtons}>
+                        <TextInput
+                            label="Search by Name"
+                            mode='outlined'
+                            style={{ backgroundColor: "#cae8e0", width: 240 }}
+                            value={searchWord}
+                            onChangeText={text => setSearchWord(text)}
+                        />
+                        <Button compact textColor="#000000" onPress={() => setSearchWord("")}>Clear</Button>
+                    </View>
+                    <FlatList
+                        style={styles.list}
+                        data={games}
+                        ItemSeparatorComponent={separator}
+                        renderItem={({ item }) => <View style={{ gap: 10 }}>
+                            <View style={styles.listItem}>
+                                <Text style={{ paddingLeft: 8, maxWidth: 200 }}>{item.name}</Text>
+                                <View>
+                                    {myGames.find(game => game[1].id === item.id)
+                                        ? <Pressable onPress={() => showDialog(item)}><RemoveButton /></Pressable>
+                                        : <Pressable onPress={() => handleSave(item)}><AddButton /></Pressable>
+                                    }
                                 </View>
-                                <Image
-                                    style={styles.image}
-                                    source={{
-                                        uri: `${item.background_image}`
-                                    }}
-                                />
-                            </View>}>
-                        </FlatList>
-                        <View style={styles.buttons}>
-                            <IconButton containerColor="#e1e1e1" onPress={() => fetchPreviousPageData()} mode="contained" icon="arrow-left-bold" style={styles.button} ></IconButton>
-                            <IconButton containerColor="#e1e1e1" onPress={() => fetchNextPageData()} mode="contained" icon="arrow-right-bold" style={styles.button}></IconButton>
-                        </View>
-                    </Card.Content>
-                </Card>
-                <Snackbar
-                    visible={snackBarVisible}
-                    onDismiss={onDismissSnackBar}
-                    duration={3000}>
-                    Game Deleted
-                </Snackbar>
-            </SafeAreaView>
+                            </View>
+                            <Image
+                                style={styles.image}
+                                source={{
+                                    uri: `${item.background_image}`
+                                }}
+                            />
+                        </View>}>
+                    </FlatList>
+                    <View style={styles.buttons}>
+                        <IconButton containerColor="#e1e1e1" onPress={() => fetchPreviousPageData()} mode="contained" icon="arrow-left-bold" style={styles.button} ></IconButton>
+                        <IconButton containerColor="#e1e1e1" onPress={() => fetchNextPageData()} mode="contained" icon="arrow-right-bold" style={styles.button}></IconButton>
+                    </View>
+                </Card.Content>
+            </Card>
+            <Snackbar
+                visible={snackBarVisible}
+                onDismiss={onDismissSnackBar}
+                duration={3000}>
+                Game Deleted
+            </Snackbar>
+        </SafeAreaView>
     )
 }
